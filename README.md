@@ -1,3 +1,7 @@
+# Intro
+
+Forked from node-http-proxy, added feature: 'passes' function can be promisified when executed.
+=======
 <p align="center">
   <img src="https://raw.github.com/nodejitsu/node-http-proxy/master/doc/logo.png"/>
 </p>
