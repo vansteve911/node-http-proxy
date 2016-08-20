@@ -1,7 +1,66 @@
-# Intro
+# http-proxy-promisify
 
-Forked from node-http-proxy, added feature: 'passes' function can be promisified when executed.
-=======
+An HTTP programmable proxying library forked from [node-http-proxy](https://github.com/nodejitsu/node-http-proxy) with these features added: 
+
+- **passes** (a sequence of interceptors handling proxy request) will be promisified when executed
+-  user can define either a sychronized-style or a promisified pass:
+
+## Examples
+
+### Synchronized-style Pass
+
+```javascript
+var headerCheckInterceptor = function headerCheckInterceptor(req, res, options){
+  // check 
+  if(req.headers['from'] === 'utopia'){
+    // return a truthy value to abort the executing of passes sequence
+    return 'ridiculous';
+  }
+}
+// insert this pass before the default 'deleteLength' pass
+proxy.before('web', 'deleteLength', cacheInterceptor);
+
+```
+
+### Promisified Pass
+
+The number of a promisified pass's argument should be no more then one. Here is an example of how to retrieve cached response before executing proxy.
+
+```javascript
+var cacheInterceptor = function cacheInterceptor(args) {
+  let req = args.req,
+      res = args.res;
+    // retrieve cached response
+    return cacheStore.getCacheRes(req)
+      .then((cachedRes) => {
+        return new Promise((resolve, reject) => {
+          try {
+            if (cachedRes) {
+              // response with cached result
+              res.end(cachedRes);
+              // abort the executing of passes sequence
+              reject();
+            } else {
+              // continue executing other passes
+              resolve();
+            }
+          } catch (err) {
+            reject(err);
+          }
+        })
+      })
+  };
+// insert this pass before the default 'deleteLength' pass
+proxy.before('web', 'deleteLength', cacheInterceptor);
+
+```
+
+
+Introduction of node-http-proxy is as below.
+
+---
+
+
 <p align="center">
   <img src="https://raw.github.com/nodejitsu/node-http-proxy/master/doc/logo.png"/>
 </p>
