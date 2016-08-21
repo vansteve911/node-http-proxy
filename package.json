@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://github.com/vansteve911/node-http-proxy.git"
   },
-  "description": "HTTP proxying for the masses with promisified interceptors(passes), forked from `http-proxy`",
+  "description": "HTTP proxying for the masses with promisified interceptors(passes), forked from http-proxy",
   "author": "Charlie Robbins <charlie.robbins@gmail.com>; vansteve911 <vansteve911@gmail.com>",
   "maintainers": [
     "vansteve911 <vansteve911@gmail.com>"

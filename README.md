@@ -10,7 +10,10 @@ An HTTP programmable proxying library forked from [node-http-proxy](https://gith
 ### Synchronized-style Pass
 
 ```javascript
-var headerCheckInterceptor = function headerCheckInterceptor(req, res, options){
+var headerCheckInterceptor = function headerCheckInterceptor(args){
+  var req = args.req,
+      res = args.res,
+      option = args.option;
   // check 
   if(req.headers['from'] === 'utopia'){
     // return a truthy value to abort the executing of passes sequence
@@ -18,7 +21,7 @@ var headerCheckInterceptor = function headerCheckInterceptor(req, res, options){
   }
 }
 // insert this pass before the default 'deleteLength' pass
-proxy.before('web', 'deleteLength', cacheInterceptor);
+proxy.before('web', 'deleteLength', headerCheckInterceptor);
 
 ```
 
@@ -28,7 +31,7 @@ The number of a promisified pass's argument should be no more then one. Here is 
 
 ```javascript
 var cacheInterceptor = function cacheInterceptor(args) {
-  let req = args.req,
+  var req = args.req,
       res = args.res;
     // retrieve cached response
     return cacheStore.getCacheRes(req)
